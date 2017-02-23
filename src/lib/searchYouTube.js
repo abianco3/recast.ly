@@ -14,7 +14,6 @@ var searchYouTube = (options = {query: 'react', max: '5', key: window.YOUTUBE_AP
     },
 
     success: function(data) {
-      console.log(data);
       callback(data.items);
     },
     error: function(error) {

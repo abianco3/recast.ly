@@ -31,10 +31,14 @@ class App extends React.Component {
           }
         }
       },
-      videoList: exampleVideoData
+      videoList: exampleVideoData,
+      query: 'apple'
     };
 
     this.handleClick = this.handleClick.bind(this);
+    this.queryYouTube = _.debounce(this.queryYouTube, 500);
+    this.handleSearch = this.handleSearch.bind(this);
+
   }
 
   handleClick(video) {
@@ -43,19 +47,36 @@ class App extends React.Component {
     });
   }
 
-  componentDidMount() {
-    console.log(this.props);
-    this.props.searchYouTube({query: 'apple', max: '5', key: window.YOUTUBE_API_KEY}, (library) => {
-      console.log('apple');
-      this.setState({videoList: library, currentVideo: library[0]});
+  queryYouTube() {
+    let options = {
+      query: this.state.query,
+      max: '5',
+      key: window.YOUTUBE_API_KEY
+    };
+
+    this.props.searchYouTube(options, (library) => {
+      this.setState({
+        videoList: library,
+        currentVideo: library[0]
+      });
     });
+  }
+
+  handleSearch(event) {
+    // reset the query state
+    this.setState({'query': event.target.value});
+    this.queryYouTube();
+  }
+
+  componentDidMount() {
+    this.queryYouTube();
   }
 
   render() {
 
     return (
       <div>
-        <Nav />
+        <Nav handleSearch={this.handleSearch} />
         <div className="col-md-7">
           <VideoPlayer video={this.state.currentVideo} />
         </div>
