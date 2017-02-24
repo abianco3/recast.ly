@@ -33,7 +33,8 @@ class App extends React.Component {
       },
       videoList: exampleVideoData,
       query: 'apple',
-      likes: 0
+      likes: 0,
+      autoplay: 0,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -76,6 +77,13 @@ class App extends React.Component {
     this.queryYouTube();
   }
 
+  toggleAutoplay(ischecked) {
+    this.setState({
+      autoplay: ischecked ? 1 : 0
+    });
+    console.log(this.state.autoplay);
+  }
+
   componentDidMount() {
     this.load();
   }
@@ -90,8 +98,9 @@ class App extends React.Component {
             video={this.state.currentVideo} 
             key={this.state.currentVideo.id.videoId} 
             likes={this.state.likes}
+            autoplay={this.state.autoplay}
           />
-
+        <Autoplay toggleAutoplay={this.toggleAutoplay.bind(this)} />
         </div>
         <div className="col-md-7">
         </div>
