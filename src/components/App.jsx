@@ -32,16 +32,24 @@ class App extends React.Component {
         }
       },
       videoList: exampleVideoData,
-      query: 'apple'
+      query: 'apple',
+      likes: 0
     };
 
     this.handleClick = this.handleClick.bind(this);
+    this.load = this.queryYouTube;
     this.queryYouTube = _.debounce(this.queryYouTube, 500);
     this.handleSearch = this.handleSearch.bind(this);
 
   }
 
   handleClick(video) {
+    // call search by video and set likes state on success
+    this.props.searchByVideo(video.id.videoId, (({items})=>{
+      this.setState({
+        likes: items[0].statistics.likeCount
+      });
+    }));
     this.setState({
       currentVideo: video
     });
@@ -69,7 +77,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.queryYouTube();
+    this.load();
   }
 
   render() {
@@ -78,7 +86,14 @@ class App extends React.Component {
       <div>
         <Nav handleSearch={this.handleSearch} />
         <div className="col-md-7">
-          <VideoPlayer video={this.state.currentVideo} />
+          <VideoPlayer 
+            video={this.state.currentVideo} 
+            key={this.state.currentVideo.id.videoId} 
+            likes={this.state.likes}
+          />
+
+        </div>
+        <div className="col-md-7">
         </div>
         <div className="col-md-5">
           <VideoList videos={this.state.videoList} handleClick={this.handleClick} />
