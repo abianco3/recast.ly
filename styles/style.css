@@ -45,6 +45,11 @@ body {
   margin-top: 10px;
 }
 
+.likeCount {
+  float: right;
+  font-size: 24px;
+}
+
 .video-list {
   background: #fff;
   padding: 8px;
